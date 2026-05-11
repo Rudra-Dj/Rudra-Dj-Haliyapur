@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudra DJ - Jarai Kalan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. General Setup (Dark Theme) --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 70px; /* Menu ke liye jagah */
+        }
+
+        /* --- 2. App-Like Pages --- */
+        .page {
+            display: none; /* Default mein sab hide rahega */
+            padding: 20px;
+            animation: fadeIn 0.4s ease-in-out;
+            min-height: 100vh;
+        }
+        .active-page {
+            display: block; /* Sirf active page dikhega */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 3. Home Screen Styling (Neon & Marquee) --- */
+        .home-bg {
+            /* Yahan aap apne Trola ya DCM ka photo URL daal sakte hain */
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/600x800/222/fff?text=DJ+Background') center/cover;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+        .neon-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #fff;
+            /* DJ Neon Light Effect (Cyan & Pink) */
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0ff, 0 0 40px #0ff, 0 0 80px #0ff;
+            margin-bottom: 10px;
+        }
+        .location {
+            font-size: 1.2rem;
+            color: #ff00de;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #ff00de;
+        }
+        .contact-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #0ff;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px #0ff;
+        }
+        .marquee-container {
+            background-color: #ff00de;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        /* --- 4. Bottom Navigation Menu (App Look) --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 2px solid #ff00de;
+            box-shadow: 0 -5px 15px rgba(255, 0, 222, 0.3);
+            z-index: 100;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .nav-btn.active {
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        /* Section styling for other pages */
+        h2 { color: #ff00de; margin-bottom: 15px; font-family: 'Orbitron', sans-serif;}
+        p, li { line-height: 1.6; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="marquee-container">
+        <marquee behavior="scroll" direction="left">Heavy Bass & Light Setup Available • Book Now for Shaadi & Parties!</marquee>
+    </div>
+
+    <div id="home" class="page active-page">
+        <br><br>
+        <div class="home-bg">
+            <h1 class="neon-title">Rudra DJ</h1>
+            <p class="location">📍 Jarai Kalan, Uttar Pradesh</p>
+            <div class="contact-box">
+                For Booking:<br>
+                📞 +91-XXXXXXXXXX
+            </div>
+        </div>
+    </div>
+
+    <div id="setup" class="page">
+        <br><br>
+        <h2>Hamara Setup</h2>
+        <ul>
+            <li>🔥 <b>Heavy Trola Setup:</b> 12 Bass, 8 Top, 4 Sharpy Lights.</li>
+            <li>🚚 <b>DCM Setup:</b> Perfect for Baraat and road shows.</li>
+            <li>🔊 <b>JBL / P-Audio Speakers:</b> Clear and thumping sound.</li>
+        </ul>
+    </div>
+
+    <div id="gallery" class="page">
+        <br><br>
+        <h2>Gallery</h2>
+        <p>Aapke events ki yaadein yahan dikhengi.</p>
+        <div style="background: #333; height: 150px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+            📸 Event Photo 1 (Placeholder)
+        </div>
+        <div style="background: #333; height: 150px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+            🎥 Public Dance Video (Placeholder)
+        </div>
+    </div>
+
+    <div id="services" class="page">
+        <br><br>
+        <h2>Services</h2>
+        <p>Hum in sabhi events ke liye available hain:</p>
+        <ul>
+            <li>💍 Shaadi / Wedding Reception</li>
+            <li>🕺 Baraat / Road Shows</li>
+            <li>🎂 Birthday Parties</li>
+            <li>🎪 Jagran / Religious Events</li>
+        </ul>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="switchPage('home', this)">Home</button>
+        <button class="nav-btn" onclick="switchPage('setup', this)">Setup</button>
+        <button class="nav-btn" onclick="switchPage('gallery', this)">Gallery</button>
+        <button class="nav-btn" onclick="switchPage('services', this)">Services</button>
+    </nav>
+
+    <script>
+        function switchPage(pageId, clickedButton) {
+            // Step 1: Sabhi pages ko chupa do (hide)
+            let pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active-page');
+            });
+
+            // Step 2: Jo page click hua hai sirf use dikhao (show)
+            document.getElementById(pageId).classList.add('active-page');
+
+            // Step 3: Sabhi buttons se 'active' class hata do
+            let buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Step 4: Click kiye gaye button ko highlight (neon glow) kar do
+            clickedButton.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
