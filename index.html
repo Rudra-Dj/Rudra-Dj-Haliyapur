@@ -4,193 +4,341 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rudra DJ - Jarai Kalan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <!-- Simple, clean font use kiya hai -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 1. General Setup (Dark Theme) --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* --- General Setup --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background-color: #121212; /* Dark background */
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
+            background-color: #121212; 
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
-            padding-bottom: 70px; /* Menu ke liye jagah */
+            padding-bottom: 80px; 
+            transition: background-color 0.3s;
         }
 
-        /* --- 2. App-Like Pages --- */
-        .page {
-            display: none; /* Default mein sab hide rahega */
-            padding: 20px;
-            animation: fadeIn 0.4s ease-in-out;
-            min-height: 100vh;
-        }
-        .active-page {
-            display: block; /* Sirf active page dikhega */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- PARTY MODE ANIMATION --- */
+        .party-active { animation: discoBg 0.5s infinite !important; }
+        @keyframes discoBg {
+            0% { background-color: #8B008B; }
+            50% { background-color: #00008B; }
+            100% { background-color: #8B008B; }
         }
 
-        /* --- 3. Home Screen Styling (Neon & Marquee) --- */
+        .party-btn {
+            position: fixed; top: 40px; right: 10px;
+            background-color: #ff0055; color: white; border: none;
+            padding: 6px 12px; border-radius: 20px; font-weight: bold;
+            font-size: 0.8rem; z-index: 200; cursor: pointer;
+        }
+
+        .float-wa {
+            position: fixed; bottom: 90px; right: 15px;
+            background-color: #25D366; color: white; width: 50px; height: 50px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 1000; text-decoration: none;
+        }
+
+        .page { display: none; padding: 15px; animation: fadeIn 0.3s ease-in-out; min-height: 100vh; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- Home Screen --- */
         .home-bg {
-            /* Yahan aap apne Trola ya DCM ka photo URL daal sakte hain */
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/600x800/222/fff?text=DJ+Background') center/cover;
-            border-radius: 15px;
-            padding: 40px 20px;
-            text-align: center;
-            margin-top: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('https://i.ibb.co/JF0NVf7w/dj-setup.jpg') center/cover;
+            border-radius: 10px; padding: 40px 15px; text-align: center;
+            margin-top: 50px; border: 1px solid #333;
         }
-        .neon-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            color: #fff;
-            /* DJ Neon Light Effect (Cyan & Pink) */
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0ff, 0 0 40px #0ff, 0 0 80px #0ff;
-            margin-bottom: 10px;
-        }
-        .location {
-            font-size: 1.2rem;
-            color: #ff00de;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px #ff00de;
-        }
-        .contact-box {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #0ff;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            box-shadow: 0 0 15px #0ff;
-        }
-        .marquee-container {
-            background-color: #ff00de;
-            color: white;
-            padding: 10px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
+        .main-title { font-size: 2.2rem; color: #00e5ff; font-weight: 700; margin-bottom: 5px; }
+        .location { font-size: 0.9rem; color: #ccc; margin-bottom: 25px; }
+        .book-now-btn {
+            background-color: #00e5ff; color: #000; border: none;
+            padding: 10px 20px; font-size: 1rem; border-radius: 5px;
+            font-weight: bold; cursor: pointer;
         }
 
-        /* --- 4. Bottom Navigation Menu (App Look) --- */
+        /* --- Rating Form Section (Naya) --- */
+        .rating-section {
+            background-color: #1a1a1a; padding: 20px; border-radius: 10px;
+            margin-top: 25px; border: 1px solid #333; text-align: center;
+        }
+        .rating-title { font-size: 1.1rem; color: #fff; margin-bottom: 10px; }
+        
+        .star-rating {
+            display: flex; justify-content: center; flex-direction: row-reverse;
+            font-size: 2rem; margin-bottom: 15px;
+        }
+        .star-rating input { display: none; }
+        .star-rating label { color: #555; cursor: pointer; padding: 0 5px; transition: color 0.2s; }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label { color: #ffcc00; }
+
+        .review-input {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            background-color: #2a2a2a; color: #fff; border: 1px solid #444;
+            border-radius: 5px; font-family: 'Roboto', sans-serif;
+        }
+        .submit-btn {
+            background-color: #ff0055; color: #fff; border: none;
+            padding: 10px 20px; font-size: 1rem; border-radius: 5px;
+            font-weight: bold; cursor: pointer; width: 100%;
+        }
+
+        /* --- Gallery Page (Naya) --- */
+        .insta-btn {
+            display: block; width: 100%; padding: 15px; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 1.1rem;
+            color: white; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            text-align: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(220, 39, 67, 0.4);
+        }
+        .gallery-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .gallery-item {
+            width: 100%; height: 150px; background-color: #222;
+            border-radius: 8px; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid #333;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* --- Reviews & Setup List --- */
+        .reviews-container { margin-top: 25px; }
+        .review-box {
+            background-color: #1e1e1e; padding: 12px; border-radius: 8px;
+            margin-bottom: 10px; font-size: 0.85rem; color: #ddd;
+        }
+        .stars-display { color: #ffcc00; margin-bottom: 3px; font-size: 1rem; }
+        .reviewer-name { color: #00e5ff; font-weight: bold; font-size: 0.8rem; margin-top: 5px; display: block; }
+
+        .setup-list { list-style: none; }
+        .setup-item {
+            background-color: #1e1e1e; padding: 15px; border-radius: 8px;
+            margin-bottom: 15px; border-left: 3px solid #00e5ff;
+        }
+        .price-tag { color: #00e5ff; font-weight: bold; font-size: 0.9rem; margin-top: 8px; display: block; }
+
+        /* --- Contact --- */
+        .contact-box {
+            background-color: #1e1e1e; border-radius: 10px; padding: 30px 15px;
+            text-align: center; margin-top: 50px;
+        }
+        .action-btn {
+            display: block; width: 100%; padding: 12px; border-radius: 5px;
+            text-decoration: none; font-weight: bold; font-size: 1rem; color: white; margin-top: 10px;
+        }
+
+        .marquee-container {
+            background-color: #ff0055; color: white; padding: 5px 10px;
+            font-size: 0.9rem; position: fixed; top: 0; width: 100%; z-index: 100;
+        }
+
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #1e1e1e;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            border-top: 2px solid #ff00de;
-            box-shadow: 0 -5px 15px rgba(255, 0, 222, 0.3);
-            z-index: 100;
+            position: fixed; bottom: 0; width: 100%; background-color: #1a1a1a;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            border-top: 1px solid #333; z-index: 100;
         }
         .nav-btn {
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 1rem;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            transition: 0.3s;
+            background: none; border: none; color: #777; font-size: 0.8rem;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center;
         }
-        .nav-btn.active {
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff;
-        }
-        
-        /* Section styling for other pages */
-        h2 { color: #ff00de; margin-bottom: 15px; font-family: 'Orbitron', sans-serif;}
-        p, li { line-height: 1.6; margin-bottom: 10px; }
+        .nav-btn.active { color: #00e5ff; font-weight: bold; }
+        h2 { color: #00e5ff; font-size: 1.3rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div class="marquee-container">
-        <marquee behavior="scroll" direction="left">Heavy Bass & Light Setup Available • Book Now for Shaadi & Parties!</marquee>
+        <marquee behavior="scroll" direction="left">Rudra DJ - Best Setup for Shaadi, Baraat & Parties. Book Now!</marquee>
     </div>
 
+    <button class="party-btn" onclick="toggleParty()">🎉 Party Mode</button>
+    <a href="https://wa.me/919648869450" class="float-wa" target="_blank">💬</a>
+
+    <!-- HOME PAGE -->
     <div id="home" class="page active-page">
-        <br><br>
         <div class="home-bg">
-            <h1 class="neon-title">Rudra DJ</h1>
-            <p class="location">📍 Jarai Kalan, Uttar Pradesh</p>
-            <div class="contact-box">
-                For Booking:<br>
-                📞 +91-XXXXXXXXXX
+            <h1 class="main-title">Rudra DJ</h1>
+            <p class="location">📍 Jarai Kalan, UP</p>
+            <button class="book-now-btn" onclick="switchPage('contactPage', document.getElementById('nav-contact'))">
+                Book Now
+            </button>
+        </div>
+
+        <!-- NEW: Give Rating Section -->
+        <div class="rating-section">
+            <div class="rating-title">Hamara Setup Kaisa Laga? Rate Karein!</div>
+            
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+
+            <input type="text" id="reviewerName" class="review-input" placeholder="Aapka Naam...">
+            <textarea id="reviewText" class="review-input" rows="3" placeholder="Apna Review Likhein..."></textarea>
+            
+            <button class="submit-btn" onclick="submitReview()">Submit Review</button>
+            <p id="reviewThanks" style="display: none; color: #00ff00; margin-top: 10px; font-size: 0.9rem;">Thank You! Aapka review submit ho gaya.</p>
+        </div>
+
+        <!-- REVIEWS DISPLAY -->
+        <div class="reviews-container" id="reviewsContainer">
+            <h2>Reviews</h2>
+            <div class="review-box">
+                <div class="stars-display">★★★★★</div>
+                "Bhai ka setup ek number hai! Bass bahut tagda tha."
+                <span class="reviewer-name">- Rahul</span>
+            </div>
+            <div class="review-box">
+                <div class="stars-display">★★★★★</div>
+                "Shaadi mein baraat ke liye DCM setup book kiya tha. Perfect."
+                <span class="reviewer-name">- Amit Singh</span>
             </div>
         </div>
     </div>
 
+    <!-- SETUP PAGE -->
     <div id="setup" class="page">
         <br><br>
-        <h2>Hamara Setup</h2>
-        <ul>
-            <li>🔥 <b>Heavy Trola Setup:</b> 12 Bass, 8 Top, 4 Sharpy Lights.</li>
-            <li>🚚 <b>DCM Setup:</b> Perfect for Baraat and road shows.</li>
-            <li>🔊 <b>JBL / P-Audio Speakers:</b> Clear and thumping sound.</li>
+        <h2>Our Setup</h2>
+        <ul class="setup-list">
+            <li class="setup-item">
+                <div style="font-size: 1.1rem; color: #fff; margin-bottom: 5px;">🔥 Heavy Trola Setup</div>
+                <div style="font-size: 0.85rem; color: #aaa;">12 Bass, 8 Top, 4 Sharpy Lights. Dhamakedar sound.</div>
+                <span class="price-tag">👉 Call for Best Price</span>
+            </li>
+            <li class="setup-item">
+                <div style="font-size: 1.1rem; color: #fff; margin-bottom: 5px;">🚚 DCM Setup</div>
+                <div style="font-size: 0.85rem; color: #aaa;">Road shows aur baraat ke liye best mobile DJ.</div>
+                <span class="price-tag">👉 Call for Best Price</span>
+            </li>
         </ul>
     </div>
 
+    <!-- GALLERY PAGE (NEW) -->
     <div id="gallery" class="page">
         <br><br>
         <h2>Gallery</h2>
-        <p>Aapke events ki yaadein yahan dikhengi.</p>
-        <div style="background: #333; height: 150px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
-            📸 Event Photo 1 (Placeholder)
-        </div>
-        <div style="background: #333; height: 150px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
-            🎥 Public Dance Video (Placeholder)
+        
+        <!-- Instagram Link Button -->
+        <a href="https://www.instagram.com/rudra.jarai?igsh=MXN6ZTNwbzMwbXJuZg==" target="_blank" class="insta-btn">
+            📸 Follow us on Instagram
+        </a>
+        
+        <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Kuch Jhalak (Glimpses):</p>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://i.ibb.co/JF0NVf7w/dj-setup.jpg" alt="DJ Setup">
+            </div>
+            <!-- Yahan aap aur photo links daal sakte hain -->
+            <div class="gallery-item" style="background-color: #333; display: flex; flex-direction: column;">
+               <span style="font-size:2rem;">🚚</span>
+               <span style="font-size:0.7rem; color:#aaa;">Photo Space</span>
+            </div>
+             <div class="gallery-item" style="background-color: #333; display: flex; flex-direction: column;">
+               <span style="font-size:2rem;">🔊</span>
+               <span style="font-size:0.7rem; color:#aaa;">Photo Space</span>
+            </div>
+             <div class="gallery-item" style="background-color: #333; display: flex; flex-direction: column;">
+               <span style="font-size:2rem;">💥</span>
+               <span style="font-size:0.7rem; color:#aaa;">Photo Space</span>
+            </div>
         </div>
     </div>
 
-    <div id="services" class="page">
+    <!-- CONTACT PAGE -->
+    <div id="contactPage" class="page">
         <br><br>
-        <h2>Services</h2>
-        <p>Hum in sabhi events ke liye available hain:</p>
-        <ul>
-            <li>💍 Shaadi / Wedding Reception</li>
-            <li>🕺 Baraat / Road Shows</li>
-            <li>🎂 Birthday Parties</li>
-            <li>🎪 Jagran / Religious Events</li>
-        </ul>
+        <div class="contact-box">
+            <h1 style="color:#00e5ff; font-size: 1.8rem; margin-bottom:5px;">Rudra DJ</h1>
+            <p style="color: #aaa; font-size: 0.9rem;">24/7 Available</p>
+            <div style="font-size: 1.5rem; font-weight: bold; color: #fff; margin: 15px 0;">+91 96488 69450</div>
+            <a href="tel:+919648869450" class="action-btn" style="background-color: #0088cc;">📞 Call Now</a>
+            <a href="https://wa.me/919648869450" class="action-btn" style="background-color: #25D366;">💬 WhatsApp</a>
+        </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION (Updated) -->
     <nav class="bottom-nav">
-        <button class="nav-btn active" onclick="switchPage('home', this)">Home</button>
-        <button class="nav-btn" onclick="switchPage('setup', this)">Setup</button>
-        <button class="nav-btn" onclick="switchPage('gallery', this)">Gallery</button>
-        <button class="nav-btn" onclick="switchPage('services', this)">Services</button>
+        <button id="nav-home" class="nav-btn active" onclick="switchPage('home', this)">Home</button>
+        <button id="nav-setup" class="nav-btn" onclick="switchPage('setup', this)">Setup</button>
+        <!-- Naya Gallery Button add kiya hai -->
+        <button id="nav-gallery" class="nav-btn" onclick="switchPage('gallery', this)">Gallery</button>
+        <button id="nav-contact" class="nav-btn" onclick="switchPage('contactPage', this)">Contact</button>
     </nav>
 
     <script>
         function switchPage(pageId, clickedButton) {
-            // Step 1: Sabhi pages ko chupa do (hide)
-            let pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.classList.remove('active-page');
-            });
-
-            // Step 2: Jo page click hua hai sirf use dikhao (show)
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
-
-            // Step 3: Sabhi buttons se 'active' class hata do
-            let buttons = document.querySelectorAll('.nav-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Step 4: Click kiye gaye button ko highlight (neon glow) kar do
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             clickedButton.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleParty() {
+            document.body.classList.toggle('party-active');
+            let btn = document.querySelector('.party-btn');
+            if(document.body.classList.contains('party-active')) {
+                btn.innerHTML = "🛑 Stop";
+            } else {
+                btn.innerHTML = "🎉 Party";
+            }
+        }
+
+        // --- Review Submit Logic ---
+        function submitReview() {
+            let name = document.getElementById('reviewerName').value;
+            let text = document.getElementById('reviewText').value;
+            
+            // Pata lagana ki kitne star select kiye hain
+            let rating = 0;
+            let stars = document.getElementsByName('rating');
+            for(let i=0; i<stars.length; i++){
+                if(stars[i].checked) { rating = stars[i].value; break; }
+            }
+
+            // Validation (Check karna ki form poora bhara hai ya nahi)
+            if(rating == 0) { alert("Please Star Rating select karein!"); return; }
+            if(name.trim() == "") { alert("Please Apna Naam likhein!"); return; }
+            if(text.trim() == "") { alert("Please Review likhein!"); return; }
+
+            // Stars ko draw karna
+            let starString = "";
+            for(let i=0; i<rating; i++) { starString += "★"; }
+
+            // Naya review box banana aur usme data daalna
+            let newReviewBox = document.createElement('div');
+            newReviewBox.className = 'review-box';
+            newReviewBox.innerHTML = `
+                <div class="stars-display">${starString}</div>
+                "${text}"
+                <span class="reviewer-name">- ${name}</span>
+            `;
+
+            // Naye review ko Reviews section mein sabse upar add karna
+            let reviewsContainer = document.getElementById('reviewsContainer');
+            // '<h2>Reviews</h2>' ke theek neeche add karne ke liye
+            reviewsContainer.insertBefore(newReviewBox, reviewsContainer.children[1]);
+
+            // Form ko saaf kar dena aur Thank You message dikhana
+            document.getElementById('reviewerName').value = "";
+            document.getElementById('reviewText').value = "";
+            for(let i=0; i<stars.length; i++){ stars[i].checked = false; }
+            
+            let thanksMsg = document.getElementById('reviewThanks');
+            thanksMsg.style.display = "block";
+            setTimeout(function(){ thanksMsg.style.display = "none"; }, 3000); // 3 second baad chupa dena
         }
     </script>
 
