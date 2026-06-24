@@ -1,1 +1,2 @@
 google.com, pub-9677796029436251, DIRECT, f08c47fec0942fa0
+<meta name="google-adsense-account" content="ca-pub-9677796029436251">
