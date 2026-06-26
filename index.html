@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudra DJ - Jarai Kalan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Ad 1 & 2: Popunder/Global Ad Scripts -->
+    <script src="https://pl29872896.effectivecpmnetwork.com/72/37/4e/72374e13a00f3a872dab020a621d1f3c.js"></script>
+    <script src="https://pl29872894.effectivecpmnetwork.com/f4/64/08/f46408f86e0d8f2ae8cc61696b0bc66a.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #121212; 
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 140px; 
+            transition: background-color 0.3s;
+        }
+
+        .party-active { animation: discoBg 0.5s infinite !important; }
+        @keyframes discoBg {
+            0% { background-color: #8B008B; }
+            50% { background-color: #00008B; }
+            100% { background-color: #8B008B; }
+        }
+
+        .party-btn {
+            position: fixed; top: 40px; right: 10px;
+            background-color: #ff0055; color: white; border: none;
+            padding: 6px 12px; border-radius: 20px; font-weight: bold;
+            font-size: 0.8rem; z-index: 200; cursor: pointer;
+        }
+
+        .float-wa {
+            position: fixed; bottom: 130px; right: 15px;
+            background-color: #25D366; color: white; width: 50px; height: 50px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 1000; text-decoration: none;
+        }
+
+        .page { display: none; padding: 15px; animation: fadeIn 0.3s ease-in-out; min-height: 100vh; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .home-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('https://i.ibb.co/JF0NVf7w/dj-setup.jpg') center/cover;
+            border-radius: 10px; padding: 40px 15px; text-align: center;
+            margin-top: 40px; border: 1px solid #333;
+        }
+        .main-title { font-size: 2.2rem; color: #00e5ff; font-weight: 700; margin-bottom: 5px; }
+        .location { font-size: 0.9rem; color: #ccc; margin-bottom: 25px; }
+        .book-now-btn {
+            background-color: #00e5ff; color: #000; border: none;
+            padding: 10px 20px; font-size: 1rem; border-radius: 5px;
+            font-weight: bold; cursor: pointer;
+        }
+
+        .rating-section {
+            background-color: #1a1a1a; padding: 20px; border-radius: 10px;
+            margin-top: 25px; border: 1px solid #333; text-align: center;
+        }
+        .rating-title { font-size: 1.1rem; color: #fff; margin-bottom: 10px; }
+        
+        .star-rating {
+            display: flex; justify-content: center; flex-direction: row-reverse;
+            font-size: 2rem; margin-bottom: 15px;
+        }
+        .star-rating input { display: none; }
+        .star-rating label { color: #555; cursor: pointer; padding: 0 5px; transition: color 0.2s; }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label { color: #ffcc00; }
+
+        .review-input {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            background-color: #2a2a2a; color: #fff; border: 1px solid #444;
+            border-radius: 5px; font-family: 'Roboto', sans-serif;
+        }
+        .submit-btn {
+            background-color: #ff0055; color: #fff; border: none;
+            padding: 10px 20px; font-size: 1rem; border-radius: 5px;
+            font-weight: bold; cursor: pointer; width: 100%;
+        }
+
+        .insta-btn {
+            display: block; width: 100%; padding: 15px; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 1.1rem;
+            color: white; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            text-align: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(220, 39, 67, 0.4);
+        }
+        .gallery-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .gallery-item {
+            width: 100%; height: 150px; background-color: #222;
+            border-radius: 8px; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid #333;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .reviews-container { margin-top: 25px; }
+        .review-box {
+            background-color: #1e1e1e; padding: 12px; border-radius: 8px;
+            margin-bottom: 10px; font-size: 0.85rem; color: #ddd;
+        }
+        .stars-display { color: #ffcc00; margin-bottom: 3px; font-size: 1rem; }
+        .reviewer-name { color: #00e5ff; font-weight: bold; font-size: 0.8rem; margin-top: 5px; display: block; }
+
+        .setup-list { list-style: none; }
+        .setup-item {
+            background-color: #1e1e1e; padding: 15px; border-radius: 8px;
+            margin-bottom: 15px; border-left: 3px solid #00e5ff;
+        }
+        .price-tag { color: #00e5ff; font-weight: bold; font-size: 0.9rem; margin-top: 8px; display: block; }
+
+        .contact-box {
+            background-color: #1e1e1e; border-radius: 10px; padding: 30px 15px;
+            text-align: center; margin-top: 40px;
+        }
+        .action-btn {
+            display: block; width: 100%; padding: 12px; border-radius: 5px;
+            text-decoration: none; font-weight: bold; font-size: 1rem; color: white; margin-top: 10px;
+        }
+
+        .marquee-container {
+            background-color: #ff0055; color: white; padding: 5px 10px;
+            font-size: 0.9rem; position: fixed; top: 0; width: 100%; z-index: 100;
+        }
+
+        .ad-container-mobile {
+            position: fixed; bottom: 60px; width: 100%; text-align: center; z-index: 99;
+            background-color: #121212; padding-top: 5px;
+        }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background-color: #1a1a1a;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            border-top: 1px solid #333; z-index: 100;
+        }
+        .nav-btn {
+            background: none; border: none; color: #777; font-size: 0.8rem;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center;
+        }
+        .nav-btn.active { color: #00e5ff; font-weight: bold; }
+        h2 { color: #00e5ff; font-size: 1.3rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        
+        .ad-wrapper { margin: 20px 0; display: flex; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div class="marquee-container">
+        <marquee behavior="scroll" direction="left">Rudra DJ - Best Setup for Shaadi, Baraat & Parties. Book Now!</marquee>
+    </div>
+
+    <button class="party-btn" onclick="toggleParty()">🎉 Party Mode</button>
+    <a href="https://wa.me/919648869450" class="float-wa" target="_blank">💬</a>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active-page">
+        <br>
+        <div class="home-bg">
+            <h1 class="main-title">Rudra DJ</h1>
+            <p class="location">📍 Jarai Kalan, UP</p>
+            <button class="book-now-btn" onclick="switchPage('contactPage', document.getElementById('nav-contact'))">
+                Book Now
+            </button>
+        </div>
+
+        <!-- Ad 3: 300x250 Banner -->
+        <div class="ad-wrapper">
+            <script>
+              atOptions = {
+                'key' : '361a63c4f04287c4e6754d2d1f641d87',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/361a63c4f04287c4e6754d2d1f641d87/invoke.js"></script>
+        </div>
+
+        <!-- Rating Section -->
+        <div class="rating-section">
+            <div class="rating-title">Hamara Setup Kaisa Laga? Rate Karein!</div>
+            
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+
+            <input type="text" id="reviewerName" class="review-input" placeholder="Aapka Naam...">
+            <textarea id="reviewText" class="review-input" rows="3" placeholder="Apna Review Likhein..."></textarea>
+            
+            <button class="submit-btn" onclick="submitReview()">Submit Review</button>
+            <p id="reviewThanks" style="display: none; color: #00ff00; margin-top: 10px; font-size: 0.9rem;">Thank You! Aapka review submit ho gaya.</p>
+        </div>
+
+        <!-- Ad 4: Native Ad Container -->
+        <div class="ad-wrapper">
+            <script async="async" data-cfasync="false" src="https://pl29872895.effectivecpmnetwork.com/c8c68da40a8cfe3cff8bc9df23230b6f/invoke.js"></script>
+            <div id="container-c8c68da40a8cfe3cff8bc9df23230b6f"></div>
+        </div>
+
+        <!-- Reviews Display -->
+        <div class="reviews-container" id="reviewsContainer">
+            <h2>Reviews</h2>
+            <div class="review-box">
+                <div class="stars-display">★★★★★</div>
+                "Bhai ka setup ek number hai! Bass bahut tagda tha."
+                <span class="reviewer-name">- Rahul</span>
+            </div>
+            <div class="review-box">
+                <div class="stars-display">★★★★★</div>
+                "Shaadi mein baraat ke liye DCM setup book kiya tha. Perfect."
+                <span class="reviewer-name">- Amit Singh</span>
+            </div>
+        </div>
+        
+        <!-- Ad 5: Direct Link -->
+        <br>
+        <center>
+            <a href="https://www.effectivecpmnetwork.com/bsx2aqrn?key=8735962b0bbe4b54ee7fb523965aa2ef" target="_blank" style="color: #888; font-size: 12px; text-decoration: none;">Sponsored Offers</a>
+        </center>
+    </div>
+    
+    <!-- SETUP PAGE -->
+    <div id="setup" class="page">
+        <br><br>
+        <h2>Our Setup</h2>
+
+        <!-- Ad 6: 468x60 Banner -->
+        <div class="ad-wrapper" style="overflow: hidden;">
+            <script>
+              atOptions = {
+                'key' : '466dc3cf7448d5425b37643a4098ff69',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/466dc3cf7448d5425b37643a4098ff69/invoke.js"></script>
+        </div>
+
+        <ul class="setup-list">
+            <li class="setup-item">
+                <div style="font-size: 1.1rem; color: #fff; margin-bottom: 5px;">🔥 Heavy Trola Setup</div>
+                <div style="font-size: 0.85rem; color: #aaa;">12 Bass, 8 Top, 4 Sharpy Lights. Dhamakedar sound.</div>
+                <span class="price-tag">👉 Call for Best Price</span>
+            </li>
+            <li class="setup-item">
+                <div style="font-size: 1.1rem; color: #fff; margin-bottom: 5px;">🚚 DCM Setup</div>
+                <div style="font-size: 0.85rem; color: #aaa;">Road shows aur baraat ke liye best mobile DJ.</div>
+                <span class="price-tag">👉 Call for Best Price</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- GALLERY PAGE -->
+    <div id="gallery" class="page">
+        <br><br>
+        <h2>Gallery</h2>
+        
+        <a href="https://www.instagram.com/rudra.jarai?igsh=MXN6ZTNwbzMwbXJuZg==" target="_blank" class="insta-btn">
+            📸 Follow us on Instagram
+        </a>
+        
+        <!-- Ad 7: 160x300 Banner -->
+        <div class="ad-wrapper">
+            <script>
+              atOptions = {
+                'key' : '4976ede3bc09e9c5083642ff4557abfc',
+                'format' : 'iframe',
+                'height' : 300,
+                'width' : 160,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/4976ede3bc09e9c5083642ff4557abfc/invoke.js"></script>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://i.ibb.co/JF0NVf7w/dj-setup.jpg" alt="DJ Setup">
+            </div>
+            <div class="gallery-item" style="background-color: #333; display: flex; flex-direction: column;">
+               <span style="font-size:2rem;">🚚</span>
+               <span style="font-size:0.7rem; color:#aaa;">Photo Space</span>
+            </div>
+             <div class="gallery-item" style="background-color: #333; display: flex; flex-direction: column;">
+               <span style="font-size:2rem;">🔊</span>
+               <span style="font-size:0.7rem; color:#aaa;">Photo Space</span>
+            </div>
+             <div class="gallery-item" style="background-color: #333; display: flex; flex-direction: column;">
+               <span style="font-size:2rem;">💥</span>
+               <span style="font-size:0.7rem; color:#aaa;">Photo Space</span>
+            </div>
+        </div>
+
+        <!-- Ad 8: 160x600 Banner -->
+        <div class="ad-wrapper">
+            <script>
+              atOptions = {
+                'key' : '794b6d29d628101cd263812ed5daad07',
+                'format' : 'iframe',
+                'height' : 600,
+                'width' : 160,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/794b6d29d628101cd263812ed5daad07/invoke.js"></script>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contactPage" class="page">
+        <br><br>
+        <div class="contact-box">
+            <h1 style="color:#00e5ff; font-size: 1.8rem; margin-bottom:5px;">Rudra DJ</h1>
+            <p style="color: #aaa; font-size: 0.9rem;">24/7 Available</p>
+            <div style="font-size: 1.5rem; font-weight: bold; color: #fff; margin: 15px 0;">+91 96488 69450</div>
+            <a href="tel:+919648869450" class="action-btn" style="background-color: #0088cc;">📞 Call Now</a>
+            <a href="https://wa.me/919648869450" class="action-btn" style="background-color: #25D366;">💬 WhatsApp</a>
+        </div>
+    </div>
+
+    <!-- Ad 9: 320x50 Sticky Mobile Ad Footer -->
+    <div class="ad-container-mobile">
+        <script>
+          atOptions = {
+            'key' : '93e56e1da7f95f7317469a49c7b11c98',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/93e56e1da7f95f7317469a49c7b11c98/invoke.js"></script>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button id="nav-home" class="nav-btn active" onclick="switchPage('home', this)">Home</button>
+        <button id="nav-setup" class="nav-btn" onclick="switchPage('setup', this)">Setup</button>
+        <button id="nav-gallery" class="nav-btn" onclick="switchPage('gallery', this)">Gallery</button>
+        <button id="nav-contact" class="nav-btn" onclick="switchPage('contactPage', this)">Contact</button>
+    </nav>
+
+    <script>
+        function switchPage(pageId, clickedButton) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleParty() {
+            document.body.classList.toggle('party-active');
+            let btn = document.querySelector('.party-btn');
+            if(document.body.classList.contains('party-active')) {
+                btn.innerHTML = "🛑 Stop";
+            } else {
+                btn.innerHTML = "🎉 Party";
+            }
+        }
+
+        function submitReview() {
+            let name = document.getElementById('reviewerName').value;
+            let text = document.getElementById('reviewText').value;
+            
+            let rating = 0;
+            let stars = document.getElementsByName('rating');
+            for(let i=0; i<stars.length; i++){
+                if(stars[i].checked) { rating = stars[i].value; break; }
+            }
+
+            if(rating == 0) { alert("Please Star Rating select karein!"); return; }
+            if(name.trim() == "") { alert("Please Apna Naam likhein!"); return; }
+            if(text.trim() == "") { alert("Please Review likhein!"); return; }
+
+            let starString = "";
+            for(let i=0; i<rating; i++) { starString += "★"; }
+
+            let newReviewBox = document.createElement('div');
+            newReviewBox.className = 'review-box';
+            newReviewBox.innerHTML = `
+                <div class="stars-display">${starString}</div>
+                "${text}"
+                <span class="reviewer-name">- ${name}</span>
+            `;
+
+            let reviewsContainer = document.getElementById('reviewsContainer');
+            reviewsContainer.insertBefore(newReviewBox, reviewsContainer.children[1]);
+
+            document.getElementById('reviewerName').value = "";
+            document.getElementById('reviewText').value = "";
+            for(let i=0; i<stars.length; i++){ stars[i].checked = false; }
+            
+            let thanksMsg = document.getElementById('reviewThanks');
+            thanksMsg.style.display = "block";
+            setTimeout(function(){ thanksMsg.style.display = "none"; }, 3000); 
+        }
+    </script>
+</body>
+</html>
