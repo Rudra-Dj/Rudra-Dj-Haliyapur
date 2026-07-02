@@ -414,6 +414,14 @@
             thanksMsg.style.display = "block";
             setTimeout(function(){ thanksMsg.style.display = "none"; }, 3000); 
         }
-    </script>
+        <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log("Offline Game Ready!"))
+            .catch(err => console.log("Error: ", err));
+        });
+    }
+  </script>
 </body>
 </html>
