@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
+    <title>2-in-1 Game Hub</title>
+    <!-- Local three.js file -->
+    <script src="three.min.js"></script>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: #0a0a0e; 
+            color: #fff;
+            user-select: none;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #homeMenu {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: linear-gradient(135deg, #11111a, #2d3436);
+        }
+        .title { color: #a29bfe; font-size: 28px; margin-bottom: 20px; }
+        .game-btn {
+            background: #6c5ce7;
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 250px;
+            box-shadow: 0px 4px 15px rgba(108, 92, 231, 0.4);
+        }
+        .game-btn:active { transform: scale(0.95); }
+
+        .home-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            z-index: 100;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #gojoContainer { 
+            display: none; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100%;
+        }
+        #gameCanvas { 
+            background: linear-gradient(to bottom, #11111a, #07070a); 
+            border: 3px solid #6c5ce7; 
+            border-radius: 10px;
+            box-shadow: 0px 0px 25px rgba(108, 92, 231, 0.4);
+            max-width: 750px;
+            width: 100%;
+            height: auto;
+        }
+
+        #racingContainer { 
+            display: none; 
+            height: 100%; 
+            width: 100%; 
+            background: #87CEEB; 
+        }
+        #racingUI { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            color: #fff; 
+            font-size: 20px; 
+            text-shadow: 2px 2px 4px #000; 
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HOME MENU -->
+    <div id="homeMenu">
+        <h1 class="title">🎮 Game Hub</h1>
+        <button class="game-btn" onclick="startGojo()">1. Gojo: Jujutsu Run</button>
+        <button class="game-btn" onclick="startRacing()">2. 3D Dodge Racing</button>
+    </div>
+
+    <!-- GOJO GAME SCREEN -->
+    <div id="gojoContainer">
+        <button class="home-btn" onclick="location.reload()">🏠 Home</button>
+        <h3 style="margin: 5px 0; font-size: 16px; color: #a29bfe;">Gojo: Jujutsu School Run 🏯</h3>
+        <p style="margin: 0 0 8px 0; font-size: 11px; color: #aaa;">Pouri screen par kahin bhi TAP karke jump karein!</p>
+        <canvas id="gameCanvas" width="700" height="220"></canvas>
+    </div>
+
+    <!-- RACING GAME SCREEN -->
+    <div id="racingContainer">
+        <button class="home-btn" onclick="location.reload()">🏠 Home</button>
+        <div id="racingUI">
+            <div id="score">Score: 0</div>
+            <div id="highScore">Highest Score: 0</div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. GOJO GAME LOGIC ---
+        function startGojo() {
+            document.getElementById('homeMenu').style.display = 'none';
+            document.getElementById('gojoContainer').style.display = 'flex';
+
+            const canvas = document.getElementById("gameCanvas");
+            const ctx = canvas.getContext("2d");
+
+            let baseSpeed = 5.5, currentSpeed = baseSpeed, gravity = 0.65;
+            let obstacles = [], particles = [];
+            let score = 0, gameActive = true, spawnTimer = 30;
+            let gojo = { x: 80, y: 145, w: 26, h: 55, yVelocity: 0, jumpCount: 0 };
+
+            function setRandomSpawnTime() {
+                let minGap = Math.max(25, 45 - (currentSpeed * 1.5));
+                let maxGap = Math.max(60, 130 - (currentSpeed * 2));
+                return Math.floor(minGap + Math.random() * (maxGap - minGap));
+            }
+
+            function createParticles(x, y) {
+                for(let i=0; i<6; i++) {
+                    particles.push({
+                        x: x, y: y, vx: -2 - Math.random()*3, vy: (Math.random() - 0.5) * 5,
+                        radius: Math.random() * 5 + 1, alpha: 1
+                    });
+                }
+            }
+
+            function triggerJump() {
+                if (!gameActive) { resetGame(); return; }
+                if (gojo.jumpCount < 2) { 
+                    gojo.yVelocity = -12;
+                    gojo.jumpCount++;
+                    if(gojo.jumpCount === 2) createParticles(gojo.x + 13, gojo.y + 30);
+                }
+            }
+
+            // [FIXED]: Dono events hata kar 'pointerdown' lagaya gaya hai
+            window.addEventListener("pointerdown", (e) => { 
+                if (e.target.tagName !== "BUTTON") triggerJump(); 
+            });
+            window.addEventListener("keydown", (e) => { 
+                if (e.code === "Space" || e.code === "ArrowUp") triggerJump(); 
+            });
+
+            function update() {
+                if (!gameActive) return;
+                score += 0.2; 
+                currentSpeed = baseSpeed + (Math.floor(score) / 100);
+                
+                gojo.yVelocity += gravity;
+                gojo.y += gojo.yVelocity;
+                if (gojo.y > 145) { gojo.y = 145; gojo.yVelocity = 0; gojo.jumpCount = 0; }
+
+                for(let i = particles.length - 1; i >= 0; i--) {
+                    let p = particles[i];
+                    p.x += p.vx; p.y += p.vy; p.alpha -= 0.04;
+                    if(p.alpha <= 0) particles.splice(i, 1);
+                }
+
+                spawnTimer--;
+                if (spawnTimer <= 0) {
+                    obstacles.push({ x: 750, y: 135, w: 55, h: 65 });
+                    spawnTimer = setRandomSpawnTime(); 
+                }
+
+                for (let i = obstacles.length - 1; i >= 0; i--) {
+                    let obs = obstacles[i];
+                    obs.x -= currentSpeed;
+                    if (obs.x < -60) { obstacles.splice(i, 1); continue; }
+                    if (gojo.x < obs.x + obs.w && gojo.x + gojo.w > obs.x &&
+                        gojo.y < obs.y + obs.h && gojo.y + gojo.h > obs.y) {
+                        gameActive = false;
+                    }
+                }
+            }
+
+            function drawJapaneseHouse(ctx, x, y, w, h) {
+                ctx.save();
+                ctx.fillStyle = "#e0dbcd"; ctx.fillRect(x + 5, y + 25, w - 10, h - 25);
+                ctx.fillStyle = "#4a3b32"; ctx.fillRect(x + 12, y + 38, 12, 22); ctx.fillRect(x + w - 24, y + 38, 12, 22);
+                ctx.fillStyle = "#fff"; ctx.fillRect(x + 14, y + 40, 8, 18); ctx.fillRect(x + w - 22, y + 40, 8, 18);
+                ctx.fillStyle = "#1e272e";
+                ctx.beginPath(); ctx.moveTo(x, y + 25); ctx.quadraticCurveTo(x + w/2, y + 20, x + w, y + 25);
+                ctx.lineTo(x + w - 4, y + 20); ctx.quadraticCurveTo(x + w/2, y + 15, x + 4, y + 20); ctx.closePath(); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(x - 4, y + 20); ctx.quadraticCurveTo(x + w/2, y + 5, x + w + 4, y + 20);
+                ctx.lineTo(x + w - 10, y + 0); ctx.quadraticCurveTo(x + w/2, y - 5, x + 10, y + 0); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = "#ff3838"; ctx.fillRect(x + 2, y + 25, 4, h - 25); ctx.fillRect(x + w - 6, y + 25, 4, h - 25);
+                ctx.restore();
+            }
+
+            function drawGojo(ctx, x, y, w, h) {
+                ctx.save();
+                ctx.fillStyle = "#16161a"; ctx.fillRect(x, y + 18, w, h - 18);
+                ctx.fillStyle = "#25252e"; ctx.fillRect(x - 1, y + 18, w + 2, 6);
+                ctx.fillStyle = "#ffd3b6"; ctx.fillRect(x + 4, y + 3, w - 8, 15);
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath(); ctx.moveTo(x + 2, y + 4); ctx.lineTo(x - 2, y - 4); ctx.lineTo(x + 7, y + 1);
+                ctx.lineTo(x + 13, y - 6); ctx.lineTo(x + 18, y + 1); ctx.lineTo(x + w + 2, y - 4);
+                ctx.lineTo(x + w - 2, y + 4); ctx.closePath(); ctx.fill();
+                
+                if(gojo.jumpCount > 0) {
+                    ctx.shadowColor = "#00ffffff"; ctx.shadowBlur = 12; ctx.fillStyle = "#00fbff";
+                    ctx.fillRect(x + 5, y + 8, w - 10, 4);
+                    ctx.fillStyle = "#ffffff"; ctx.fillRect(x + 8, y + 9, 2, 2); ctx.fillRect(x + w - 10, y + 9, 2, 2);
+                } else {
+                    ctx.fillStyle = "#000000"; ctx.fillRect(x + 3, y + 6, w - 6, 7);
+                }
+                ctx.restore();
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = "#5f27cd"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(0, 200); ctx.lineTo(700, 200); ctx.stroke();
+
+                particles.forEach(p => {
+                    ctx.fillStyle = `rgba(0, 251, 255, ${p.alpha})`;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+                });
+
+                drawGojo(ctx, gojo.x, gojo.y, gojo.w, gojo.h);
+                obstacles.forEach(obs => drawJapaneseHouse(ctx, obs.x, obs.y, obs.w, obs.h));
+
+                let finalScore = Math.floor(score);
+                ctx.fillStyle = "#fff"; ctx.font = "bold 14px 'Segoe UI'";
+                ctx.fillText("DISTANCE: " + finalScore + "m", 20, 25);
+                ctx.fillText("SPEED: x" + currentSpeed.toFixed(2), 260, 25);
+                
+                if (!gameActive) {
+                    ctx.fillStyle = "rgba(5, 5, 8, 0.9)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "#6c5ce7"; ctx.font = "bold 26px Arial"; ctx.fillText("DOMAIN EXPANSION: CLOSED", 175, 95);
+                    ctx.fillStyle = "#fff"; ctx.font = "15px Arial"; ctx.fillText("Total Record: " + finalScore + "m", 260, 130);
+                    ctx.fillStyle = "#888"; ctx.font = "12px Arial"; ctx.fillText("Tap to Retry", 300, 160);
+                }
+            }
+
+            function resetGame() { obstacles = []; particles = []; score = 0; currentSpeed = baseSpeed; gojo.y = 145; gojo.yVelocity = 0; gojo.jumpCount = 0; gameActive = true; spawnTimer = 30; }
+            function gameLoop() { update(); draw(); requestAnimationFrame(gameLoop); }
+            gameLoop();
+        }
+
+        // --- 2. 3D DODGE RACING LOGIC ---
+        function startRacing() {
+            document.getElementById('homeMenu').style.display = 'none';
+            document.getElementById('racingContainer').style.display = 'block';
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            
+            const renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('racingContainer').appendChild(renderer.domElement);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(0, 10, 10);
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(0x404040));
+
+            const road = new THREE.Mesh(new THREE.PlaneGeometry(10, 2000), new THREE.MeshPhongMaterial({color: 0x333333}));
+            road.rotation.x = -Math.PI/2;
+            scene.add(road);
+
+            const car = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.5, 2.5), new THREE.MeshPhongMaterial({color: 0xff0000}));
+            const roof = new THREE.Mesh(new THREE.BoxGeometry(1, 0.4, 1), new THREE.MeshPhongMaterial({color: 0x222222}));
+            roof.position.y = 0.4; roof.position.z = -0.2;
+            car.add(body); car.add(roof);
+            car.position.set(0, 0.5, 5);
+            scene.add(car);
+
+            camera.position.set(0, 3, 10);
+            camera.lookAt(0, 0, 0);
+
+            let score = 0, speed = 0.6, obstacles = [], trees = [];
+            let highScore = localStorage.getItem('myHighScore') || 0;
+            document.getElementById('highScore').innerText = "Highest Score: " + Math.floor(highScore);
+            let spawnInterval;
+
+            function spawn() {
+                const treeGeo = new THREE.ConeGeometry(0.8, 2, 8);
+                const treeMat = new THREE.MeshPhongMaterial({color: 0x228B22});
+                const tree = new THREE.Mesh(treeGeo, treeMat);
+                tree.position.set((Math.random() > 0.5 ? 8 : -8), 1, -100);
+                scene.add(tree); trees.push(tree);
+
+                const obsGeo = new THREE.BoxGeometry(1, 1, 1);
+                const obsMat = new THREE.MeshPhongMaterial({color: Math.random() > 0.5 ? 0x888888 : 0x553311});
+                const obs = new THREE.Mesh(obsGeo, obsMat);
+                obs.position.set((Math.random()-0.5)*8, 0.5, -100);
+                scene.add(obs); obstacles.push(obs);
+            }
+            spawnInterval = setInterval(spawn, 1000);
+
+            document.addEventListener('touchmove', (e) => {
+                if (document.getElementById('racingContainer').style.display === 'block') {
+                    car.position.x = (e.touches[0].clientX / window.innerWidth - 0.5) * 8;
+                }
+            });
+
+            function animate() {
+                if(document.getElementById('racingContainer').style.display !== 'block') return; 
+                requestAnimationFrame(animate);
+                
+                score += 0.1;
+                document.getElementById('score').innerText = "Score: " + Math.floor(score);
+                speed = 0.6 + Math.floor(score / 50) * 0.15;
+
+                obstacles.forEach((o, i) => {
+                    o.position.z += speed;
+                    if(Math.abs(o.position.z - car.position.z) < 1.5 && Math.abs(o.position.x - car.position.x) < 1.2) {
+                        if(score > highScore) localStorage.setItem('myHighScore', Math.floor(score));
+                        alert("Game Over! Score: " + Math.floor(score));
+                        location.reload(); 
+                    }
+                    if(o.position.z > 10) { scene.remove(o); obstacles.splice(i, 1); }
+                });
+
+                trees.forEach((t, i) => {
+                    t.position.z += speed;
+                    if(t.position.z > 10) { scene.remove(t); trees.splice(i, 1); }
+                });
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // --- PWA OFFLINE STORAGE ENGINE ---
+        if ('serviceWorker' in navigator) {
+            const swBlobCode = `
+                const CACHE_NAME = "gamehub-v1";
+                const ASSETS = [location.href, "three.min.js"];
+                self.addEventListener("install", (e) => {
+                    e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+                });
+                self.addEventListener("fetch", (e) => {
+                    e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
+                });
+            `;
+            const blob = new Blob([swBlobCode], { type: 'text/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log(err));
+        }
+    </script>
+</body>
+</html>
